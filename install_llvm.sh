@@ -3,11 +3,35 @@
 # Install LLVM on CentOS7 platform
 # Host linux is either x86_64 or aarch64
 #
+# How to download:
+# $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_llvm.sh
+#
 FORCE_PREBUILD=1
 LLVM_VERSION="13.0.0"
 LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-project-${LLVM_VERSION}.src.tar.xz"
 LLVM_PREBUILD_AARCH64="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz"
 LLVM_PREBUILD_X86_64="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar.xz"
+
+# OS Version check
+CENTOS_VERSION=$(cat /etc/os-release | grep "PRETTY_NAME=" | sed -r 's#^PRETTY_NAME="CentOS\s+Linux\s+([0-9]).+#\1#')
+if [ $CENTOS_VERSION != "7" ]; then
+  echo "CENTOS_VERSION mismatch or using another Linux distribution, $CENTOS_VERSION. Program exit."
+  exit
+fi
+
+# Gcc version check
+GCC_VERSION=$(gcc --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
+if [ $GCC_VERSION -lt 70000 ]; then
+  echo "Your gcc is too old to build llvm. Program exit."
+  exit
+fi
+
+# Check CMAKE version > 3.22.1
+CMAKE_VERSION=$(cmake --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
+if [ "$CMAKE_VERSION" -lt 31200 ]; then
+  echo "CMAKE is too old to build llvm ${LLVM_VERSION}. Program exit."
+  exit
+fi
 
 #
 # Function hostarch()
@@ -31,15 +55,6 @@ function hostarch () {
 
 # identify host architecture
 hostarch
-
-#
-# Check CMAKE version > 3.22.1
-#
-CMAKE_VERSION=$(cmake --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
-if [ "$CMAKE_VERSION" -lt 31200 ]; then
-  echo "CMAKE is too old to build llvm ${LLVM_VERSION}. Program exit."
-  exit
-fi
 
 #
 # install LLVM ${LLVM_VERSION} if not available
@@ -126,11 +141,11 @@ if [ $ret == "1" ] && [ -d /usr/local/llvm_${LLVM_VERSION} ]; then
     sudo echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  /etc/skel/.bashrc
 fi
 
-echo "cat /proc/cpuinfo" > ${HOME}/tmp/run.log
-cat /proc/cpuinfo  >> ${HOME}/tmp/run.log
-echo "nproc" >> ${HOME}/tmp/run.log
-nproc >> ${HOME}/tmp/run.log
-echo "/usr/bin/g++ version" >> ${HOME}/tmp/run.log
-/usr/bin/g++ --version >> ${HOME}/tmp/run.log
-echo "install_llvm.sh costs $run_time [sec]." >> ${HOME}/tmp/run.log
+echo "cat /proc/cpuinfo" > ${HOME}/run_llvm${LLVM_VERSION}.log
+cat /proc/cpuinfo  >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "nproc" >> ${HOME}/run_llvm${LLVM_VERSION}.log
+nproc >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "/usr/bin/g++ version" >> ${HOME}/run_llvm${LLVM_VERSION}.log
+/usr/bin/g++ --version >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "install_llvm.sh costs $run_time [sec]." >> ${HOME}/run_llvm${LLVM_VERSION}.log
 echo ""
