@@ -87,9 +87,10 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM"\
     -DCMAKE_INSTALL_PREFIX="/usr/local/llvm_${LLVM_VERSION}" \
     ../llvm && make -j`nproc`
+  sudo make install
   end_time=`date +%s`
   run_time=$((end_time - start_time))
-  sudo make install && make clean && cd ../ && rm -rf build && cd ${HOME}
+#  make clean && cd ${HOME}
 fi
 
 if ( [ $HOSTARCH == "x86_64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then
@@ -140,3 +141,6 @@ if [ $ret == "1" ] && [ -d /usr/local/llvm_${LLVM_VERSION} ]; then
     sudo echo "export LD_LIBRARY_PATH=\$LLVM_DIR/lib:\$LD_LIBRARY_PATH"   >>  /etc/skel/.bashrc
     sudo echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  /etc/skel/.bashrc
 fi
+
+source ~/.bashrc
+sudo ldconfig -v
