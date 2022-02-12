@@ -4,7 +4,7 @@
 # Host linux is either x86_64 or aarch64
 #
 # How to download:
-#
+# $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_verilator.sh
 #
 VERILATOR_REV="214"
 URL_VERILATOR="https://github.com/verilator/verilator/tarball/v4.${VERILATOR_REV} -O verilator-v4.${VERILATOR_REV}.tgz"
@@ -76,12 +76,12 @@ if [ "$CLANG_VERSION" -gt 120000 ]; then
   export CMAKE_LINKER=`which lld`
 else
   echo "use gcc for build tool"
-  export CC='which gcc'
-  export CXX='which g++'
-  export LD='which ld.gold'
-  export CMAKE_CXX_COMPILER='which gcc++'
-  export CMAKE_C_COMPILER='which gcc'
-  export CMAKE_LINKER='which ld.gold'
+  export CC=`which gcc`
+  export CXX=`which g++`
+  export LD=`which ld.gold`
+  export CMAKE_CXX_COMPILER=`which gcc++`
+  export CMAKE_C_COMPILER=`which gcc`
+  export CMAKE_LINKER=`which ld.gold`
 fi
 
 #
@@ -101,7 +101,19 @@ cd ${HOME}/tmp/verilator && autoconf && \
 end_time=`date +%s`
 run_time=$((end_time - start_time))
 sudo ln -sf /usr/local/verilator_4_${VERILATOR_REV}/bin/verilator* /usr/local/verilator_4_${VERILATOR_REV}/share/verilator/bin/
-cd ${HOME}/tmp/verilator && make clean
+#cd ${HOME}/tmp/verilator && make clean
+
+#
+# report log
+#
+echo "cat /proc/cpuinfo" > ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+cat /proc/cpuinfo  >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo "nproc" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+nproc >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo "tool chain version" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+$CC --version >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo "install_verilator.sh costs $run_time [sec]." >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo ""
 
 #
 # .bashrc set
@@ -123,15 +135,3 @@ cd /etc/skel && \
   sudo echo "export VERILATOR_ROOT=/usr/local/verilator_4_${VERILATOR_REV}/share/verilator">> .bashrc
 cd /etc/skel && \
   sudo echo "export PATH=\$VERILATOR_ROOT/bin:\$PATH" >> .bashrc
-
-#
-# report log
-#
-echo "cat /proc/cpuinfo" > ${HOME}/tmp/run_${VERILATOR_REV}.log
-cat /proc/cpuinfo  >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-echo "nproc" >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-nproc >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-echo "tool chain version" >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-$CC --version >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-echo "install_verilator.sh costs $run_time [sec]." >> ${HOME}/tmp/run_${VERILATOR_REV}.log
-echo ""
