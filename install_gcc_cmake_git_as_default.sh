@@ -50,6 +50,7 @@ else
   cd ${HOME}/tmp/git && tar -zxvf git-2.33.1.tar.gz
   cd ${HOME}/tmp/git/git-2.33.1 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j`nproc`
   cd ${HOME}/tmp/git/git-2.33.1/build && sudo make install
+  sudo ldconfig -v
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/git
 fi
 
@@ -63,6 +64,7 @@ else
   cd ${HOME}/tmp/cmake && tar -zxvf cmake-3.18.6.tar.gz
   cd ${HOME}/tmp/cmake/cmake-3.18.6 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j`nproc`
   cd ${HOME}/tmp/cmake/cmake-3.18.6/build && sudo make install
+  sudo ldconfig -v
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/cmake
 fi
 
