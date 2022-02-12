@@ -67,6 +67,8 @@ else
   CLANG_VERSION="0"
 fi
 
+sudo yum -y install ninja-build
+
 if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTARCH == "x86_64" ] && [ $FORCE_PREBUILD == "0" ] ) ) && [ "$CLANG_VERSION" -lt 120000 ]; then
   echo "Your clang is not new. Need to update."
   echo `clang --version`
