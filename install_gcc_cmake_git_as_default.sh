@@ -48,8 +48,8 @@ else
   mkdir -p ${HOME}/tmp/git && rm -rf ${HOME}/tmp/git/* && cd ${HOME}/tmp/git && \
     aria2c -x4 https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.33.1.tar.gz
   cd ${HOME}/tmp/git && tar -zxvf git-2.33.1.tar.gz
-  cd ${HOME}/tmp/git/git-2.33.1 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j`nproc`
-  cd ${HOME}/tmp/git/git-2.33.1/build && sudo make install
+  cd ${HOME}/tmp/git/git-2.33.1 && ./configure --prefix=/usr && make -j`nproc`
+  cd ${HOME}/tmp/git/git-2.33.1 && sudo make install
   sudo ldconfig -v
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/git
 fi

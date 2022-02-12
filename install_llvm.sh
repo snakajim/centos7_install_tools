@@ -6,11 +6,9 @@
 # How to download:
 # $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_llvm.sh
 #
-FORCE_PREBUILD=1
+FORCE_PREBUILD=0
 LLVM_VERSION="13.0.0"
 LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-project-${LLVM_VERSION}.src.tar.xz"
-LLVM_PREBUILD_AARCH64="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz"
-LLVM_PREBUILD_X86_64="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar.xz"
 
 # OS Version check
 CENTOS_VERSION=$(cat /etc/os-release | grep "PRETTY_NAME=" | sed -r 's#^PRETTY_NAME="CentOS\s+Linux\s+([0-9]).+#\1#')
@@ -95,29 +93,26 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
 fi
 
 if ( [ $HOSTARCH == "x86_64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then
-  echo "Your clang is not new. Need to update from prebuild."
-  echo `clang --version`
-  sudo yum -y remove clang
-  if [ ! -f ${HOME}/tmp/clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar.xz ]; then
-    mkdir -p ${HOME}/tmp && cd ${HOME}/tmp && aria2c -x10 $LLVM_PREBUILD_X86_64
-  fi
-  cd ${HOME}/tmp && unxz -k -T `nproc` -f clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar.xz
-  sudo mkdir -p /usr/local/llvm_${LLVM_VERSION}
-  cd ${HOME}/tmp && sudo tar xf clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar --strip-components 1 -C /usr/local/llvm_${LLVM_VERSION}
+  echo "LLVM PREBUILD for CENTOS7 is not available. Program exit."
+  exit
 fi
-
 
 if ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then
-  echo "Your clang is not new. Need to update from prebuild."
-  echo `clang --version`
-  sudo yum -y remove clang
-  if [ ! -f ${HOME}/tmp/clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz ]; then
-    mkdir -p ${HOME}/tmp && cd ${HOME}/tmp && aria2c -x10 $LLVM_PREBUILD_AARCH64
-  fi
-  cd ${HOME}/tmp && unxz -k -T `nproc` -f clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz
-  sudo mkdir -p /usr/local/llvm_${LLVM_VERSION}
-  cd ${HOME}/tmp && sudo tar xf clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar --strip-components 1 -C /usr/local/llvm_${LLVM_VERSION}
+  echo "LLVM PREBUILD for CENTOS7 is not available. Program exit."
+  exit
 fi
+
+#
+# Report log
+#
+echo "cat /proc/cpuinfo" > ${HOME}/run_llvm${LLVM_VERSION}.log
+cat /proc/cpuinfo  >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "nproc" >> ${HOME}/run_llvm${LLVM_VERSION}.log
+nproc >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "/usr/bin/g++ version" >> ${HOME}/run_llvm${LLVM_VERSION}.log
+/usr/bin/g++ --version >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo "install_llvm.sh costs $run_time [sec]." >> ${HOME}/run_llvm${LLVM_VERSION}.log
+echo ""
 
 #
 # Update ~/.bashrc if necesarry
@@ -145,12 +140,3 @@ if [ $ret == "1" ] && [ -d /usr/local/llvm_${LLVM_VERSION} ]; then
     sudo echo "export LD_LIBRARY_PATH=\$LLVM_DIR/lib:\$LD_LIBRARY_PATH"   >>  /etc/skel/.bashrc
     sudo echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  /etc/skel/.bashrc
 fi
-
-echo "cat /proc/cpuinfo" > ${HOME}/run_llvm${LLVM_VERSION}.log
-cat /proc/cpuinfo  >> ${HOME}/run_llvm${LLVM_VERSION}.log
-echo "nproc" >> ${HOME}/run_llvm${LLVM_VERSION}.log
-nproc >> ${HOME}/run_llvm${LLVM_VERSION}.log
-echo "/usr/bin/g++ version" >> ${HOME}/run_llvm${LLVM_VERSION}.log
-/usr/bin/g++ --version >> ${HOME}/run_llvm${LLVM_VERSION}.log
-echo "install_llvm.sh costs $run_time [sec]." >> ${HOME}/run_llvm${LLVM_VERSION}.log
-echo ""
