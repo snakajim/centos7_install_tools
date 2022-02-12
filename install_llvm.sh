@@ -70,6 +70,7 @@ fi
 if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTARCH == "x86_64" ] && [ $FORCE_PREBUILD == "0" ] ) ) && [ "$CLANG_VERSION" -lt 120000 ]; then
   echo "Your clang is not new. Need to update."
   echo `clang --version`
+  sudo yum -y remove clang
   if [ ! -f ${HOME}/tmp/llvm-project-${LLVM_VERSION}.src.tar.xz ]; then
     mkdir -p ${HOME}/tmp && cd ${HOME}/tmp && aria2c -x10 $LLVM_URL
   fi
@@ -94,6 +95,7 @@ fi
 if ( [ $HOSTARCH == "x86_64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then
   echo "Your clang is not new. Need to update from prebuild."
   echo `clang --version`
+  sudo yum -y remove clang
   if [ ! -f ${HOME}/tmp/clang+llvm-${LLVM_VERSION}-x86_64-linux-gnu-ubuntu-20.04.tar.xz ]; then
     mkdir -p ${HOME}/tmp && cd ${HOME}/tmp && aria2c -x10 $LLVM_PREBUILD_X86_64
   fi
@@ -106,6 +108,7 @@ fi
 if ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then
   echo "Your clang is not new. Need to update from prebuild."
   echo `clang --version`
+  sudo yum -y remove clang
   if [ ! -f ${HOME}/tmp/clang+llvm-${LLVM_VERSION}-aarch64-linux-gnu.tar.xz ]; then
     mkdir -p ${HOME}/tmp && cd ${HOME}/tmp && aria2c -x10 $LLVM_PREBUILD_AARCH64
   fi
