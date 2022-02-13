@@ -8,7 +8,8 @@
 #
 FORCE_PREBUILD=0
 LLVM_VERSION="13.0.1"
-LLVM_PREFIX="/usr/local/llvm_${LLVM_VERSION}"
+#LLVM_PREFIX="/usr/local/llvm_${LLVM_VERSION}"
+LLVM_PREFIX="/usr"
 LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-project-${LLVM_VERSION}.src.tar.xz"
 
 # OS Version check

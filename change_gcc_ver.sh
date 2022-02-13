@@ -2,7 +2,7 @@
 # SCL to install gcc7/8, and set GCC8 as default compiler
 #  ---------------------------------------------------------------------------------
 # How to download
-# $>curl 
+# $>curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/change_gcc_ver.sh
 #
 yum -y install centos-release-scl
 yum -y install devtoolset-7-gcc devtoolset-7-gcc-c++
