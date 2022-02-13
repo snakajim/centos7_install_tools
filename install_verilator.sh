@@ -6,8 +6,8 @@
 # How to download:
 # $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_verilator.sh
 #
-VERILATOR_REV="214"
-URL_VERILATOR="https://github.com/verilator/verilator/tarball/v4.${VERILATOR_REV} -O verilator-v4.${VERILATOR_REV}.tgz"
+VERILATOR_REV="216"
+URL_VERILATOR="https://github.com/verilator/verilator/tarball/v4.${VERILATOR_REV}"
 
 # OS Version check
 CENTOS_VERSION=$(cat /etc/os-release | grep "PRETTY_NAME=" | sed -r 's#^PRETTY_NAME="CentOS\s+Linux\s+([0-9]).+#\1#')
@@ -89,13 +89,13 @@ fi
 #
 unset VERILATOR_ROOT 
 mkdir -p ${HOME}/tmp/verilator && rm -rf ${HOME}/tmp/verilator/*
-cd ${HOME}/tmp && wget --no-check-certificate https://github.com/verilator/verilator/tarball/v4.${VERILATOR_REV} -O verilator-v4.${VERILATOR_REV}.tgz
+cd ${HOME}/tmp && wget --no-check-certificate ${URL_VERILATOR} -O verilator-v4.${VERILATOR_REV}.tgz
 cd ${HOME}/tmp && tar -xvf verilator-v4.${VERILATOR_REV}.tgz -C verilator --strip-components 1
 start_time=`date +%s`
 cd ${HOME}/tmp/verilator && autoconf && \
   ./configure --prefix=/usr/local/verilator_4_${VERILATOR_REV} \
-  CC=$CC \
-  CXX=$CXX && \
+  CC=/usr/bin/clang \
+  CXX=/usr/bin/clang++ && \
   make -j`nproc` && \
   sudo make install
 end_time=`date +%s`
