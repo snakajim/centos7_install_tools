@@ -2,7 +2,7 @@
 # install_gcc_cmake_git_as_default.sh
 # SYNOPSIS
 # Install essential tools to newer version from source, and set as default 
-#   gcc: gcc7.5.0-2019-11-14 http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-7.5.0/gcc-7.5.0.tar.gz
+#   gcc: gcc9.4.0-2021-06-01 http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-9.4.0/gcc-9.4.0.tar.gz
 #   git: 2.33.1-2021-10-13 https://github.com/git/git.git -b v2.33.1
 # cmake: 3.18.6-2021-02-11 https://cmake.org/files/v3.18/cmake-3.18.6.tar.gz
 #
@@ -30,12 +30,12 @@ if [ $GCC_VERSION -gt 70300 ]; then
 else
   echo "Your gcc is old, replace under /usr/bin."
   mkdir -p ${HOME}/tmp/gcc && rm -rf ${HOME}/tmp/gcc/* && cd ${HOME}/tmp/gcc && \
-    aria2c -x4 http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-7.5.0/gcc-7.5.0.tar.gz
-  cd ${HOME}/tmp/gcc && tar -zxvf gcc-7.5.0.tar.gz && cd gcc-7.5.0 && ./contrib/download_prerequisites
-  cd ${HOME}/tmp/gcc/gcc-7.5.0 && mkdir -p build && cd build && ../configure --enable-languages=c,c++ --prefix=/usr --disable-multilib
-  cd ${HOME}/tmp/gcc/gcc-7.5.0/build && make -j`nproc`
-  cd ${HOME}/tmp/gcc/gcc-7.5.0/build && sudo make install
-  sudo mv /usr/lib64/libstdc++.so.6.0.24-gdb.py /usr/lib64/back_libstdc++.so.6.0.24-gdb.py
+    aria2c -x4 http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-9.4.0/gcc-9.4.0.tar.gz
+  cd ${HOME}/tmp/gcc && tar -zxvf gcc-9.4.0.tar.gz && cd gcc-9.4.0 && ./contrib/download_prerequisites
+  cd ${HOME}/tmp/gcc/gcc-9.4.0 && mkdir -p build && cd build && ../configure --enable-languages=c,c++ --prefix=/usr --disable-multilib
+  cd ${HOME}/tmp/gcc/gcc-9.4.0/build && make -j`nproc`
+  cd ${HOME}/tmp/gcc/gcc-9.4.0/build && sudo make install
+  #sudo mv /usr/lib64/libstdc++.so.6.0.24-gdb.py /usr/lib64/back_libstdc++.so.6.0.24-gdb.py
   sudo sed -i -e '$ a /usr/lib64' /etc/ld.so.conf
   sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/gcc
