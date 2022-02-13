@@ -37,7 +37,7 @@ else
   cd ${HOME}/tmp/gcc/gcc-7.5.0/build && sudo make install
   sudo mv /usr/lib64/libstdc++.so.6.0.24-gdb.py /usr/lib64/back_libstdc++.so.6.0.24-gdb.py
   sudo sed -i -e '$ a /usr/lib64' /etc/ld.so.conf
-  sudo ldconfig -v
+  sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/gcc
 fi
 
@@ -51,7 +51,7 @@ else
   cd ${HOME}/tmp/git && tar -zxvf git-2.33.1.tar.gz
   cd ${HOME}/tmp/git/git-2.33.1 && ./configure --prefix=/usr && make -j`nproc`
   cd ${HOME}/tmp/git/git-2.33.1 && sudo make install
-  sudo ldconfig -v
+  sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/git
 fi
 
@@ -65,7 +65,7 @@ else
   cd ${HOME}/tmp/cmake && tar -zxvf cmake-3.18.6.tar.gz
   cd ${HOME}/tmp/cmake/cmake-3.18.6 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j`nproc`
   cd ${HOME}/tmp/cmake/cmake-3.18.6/build && sudo make install
-  sudo ldconfig -v
+  sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/cmake
 fi
 
@@ -77,8 +77,8 @@ else
   mkdir -p ${HOME}/tmp/gmake && rm -rf ${HOME}/tmp/gmake/* && cd ${HOME}/tmp/gmake && \
   aria2c -x4 http://ftp.gnu.org/gnu/make/make-4.2.tar.gz
   cd ${HOME}/tmp/gmake && tar -zxvf make-4.2.tar.gz
-  cd ${HOME}/tmp/gmake/make-4.2 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j1
+  cd ${HOME}/tmp/gmake/make-4.2 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j`nproc`
   cd ${HOME}/tmp/gmake/make-4.2/build && sudo make install
-  sudo ldconfig -v
+  sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/gmake
 fi
