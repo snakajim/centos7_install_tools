@@ -88,8 +88,8 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     -DCMAKE_BUILD_TYPE=RELEASE \
     -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM"\
     -DCMAKE_INSTALL_PREFIX=${LLVM_PREFIX} \
-    ../llvm && make -j`nproc`
-  sudo make install
+    ../llvm && ninja -j`nproc`
+  sudo ninja install
   end_time=`date +%s`
   run_time=$((end_time - start_time))
 #  make clean && cd ${HOME}
