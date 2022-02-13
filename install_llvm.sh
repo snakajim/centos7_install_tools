@@ -7,7 +7,7 @@
 # $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_llvm.sh
 #
 FORCE_PREBUILD=0
-LLVM_VERSION="13.0.0"
+LLVM_VERSION="13.0.1"
 LLVM_PREFIX="/usr/local/llvm_${LLVM_VERSION}"
 LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-project-${LLVM_VERSION}.src.tar.xz"
 
@@ -80,8 +80,8 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     cd llvm-project-${LLVM_VERSION}.src && mkdir -p build && cd build
   start_time=`date +%s`
   cmake -G Ninja -G "Unix Makefiles"\
-    -DCMAKE_C_COMPILER=`which clang` \
-    -DCMAKE_CXX_COMPILER=`which clang++` \
+    -DCMAKE_C_COMPILER=`which gcc` \
+    -DCMAKE_CXX_COMPILER=`which g++` \
     -DLLVM_ENABLE_PROJECTS="clang;llvm;lld" \
     -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi" \
     -DCMAKE_BUILD_TYPE=RELEASE \

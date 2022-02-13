@@ -66,7 +66,7 @@ fi
 
 sudo yum -y install ninja-build
 
-if [ "$CLANG_VERSION" -gt 120000 ]; then
+if [ "$CLANG_VERSION" -gt 130000 ]; then
   echo "use clang for build tool"
   export CC=`which clang`
   export CXX=`which clang++`
@@ -94,9 +94,9 @@ cd ${HOME}/tmp && tar -xvf verilator-v4.${VERILATOR_REV}.tgz -C verilator --stri
 start_time=`date +%s`
 cd ${HOME}/tmp/verilator && autoconf && \
   ./configure --prefix=/usr/local/verilator_4_${VERILATOR_REV} \
-  CC=/usr/bin/clang \
-  CXX=/usr/bin/clang++ && \
-  make -j`nproc` && \
+  CC=$CC \
+  CXX=$CXX && \
+  make -j`nproc` 2>&1 ${HOME}/tmp/run_verilator${VERILATOR_REV}.log && \
   sudo make install
 end_time=`date +%s`
 run_time=$((end_time - start_time))
@@ -106,7 +106,7 @@ sudo ln -sf /usr/local/verilator_4_${VERILATOR_REV}/bin/verilator* /usr/local/ve
 #
 # report log
 #
-echo "cat /proc/cpuinfo" > ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo "cat /proc/cpuinfo" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
 cat /proc/cpuinfo  >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
 echo "nproc" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
 nproc >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
