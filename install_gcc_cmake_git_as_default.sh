@@ -35,7 +35,7 @@ else
   cd ${HOME}/tmp/gcc/gcc-9.4.0 && mkdir -p build && cd build && ../configure --enable-languages=c,c++ --prefix=/usr --disable-multilib
   cd ${HOME}/tmp/gcc/gcc-9.4.0/build && make -j`nproc`
   cd ${HOME}/tmp/gcc/gcc-9.4.0/build && sudo make install
-  #sudo mv /usr/lib64/libstdc++.so.6.0.24-gdb.py /usr/lib64/back_libstdc++.so.6.0.24-gdb.py
+  sudo mv /usr/lib64/libstdc++.so.6.0.28-gdb.py /usr/lib64/back_libstdc++.so.6.0.28-gdb.py
   sudo sed -i -e '$ a /usr/lib64' /etc/ld.so.conf
   sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/gcc
