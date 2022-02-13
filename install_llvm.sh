@@ -8,6 +8,7 @@
 #
 FORCE_PREBUILD=0
 LLVM_VERSION="13.0.0"
+LLVM_PREFIX="/usr/local/llvm_${LLVM_VERSION}"
 LLVM_URL="https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-project-${LLVM_VERSION}.src.tar.xz"
 
 # OS Version check
@@ -79,13 +80,13 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     cd llvm-project-${LLVM_VERSION}.src && mkdir -p build && cd build
   start_time=`date +%s`
   cmake -G Ninja -G "Unix Makefiles"\
-    -DCMAKE_C_COMPILER=`which gcc` \
-    -DCMAKE_CXX_COMPILER=`which g++` \
+    -DCMAKE_C_COMPILER=`which clang` \
+    -DCMAKE_CXX_COMPILER=`which clang++` \
     -DLLVM_ENABLE_PROJECTS="clang;llvm;lld" \
     -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi" \
     -DCMAKE_BUILD_TYPE=RELEASE \
     -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM"\
-    -DCMAKE_INSTALL_PREFIX="/usr/local/llvm_${LLVM_VERSION}" \
+    -DCMAKE_INSTALL_PREFIX=${LLVM_PREFIX} \
     ../llvm && make -j`nproc`
   sudo make install
   end_time=`date +%s`
@@ -120,27 +121,27 @@ echo ""
 #
 grep LLVM_VERSION ${HOME}/.bashrc
 ret=$?
-if [ $ret == "1" ] && [ -d /usr/local/llvm_${LLVM_VERSION} ]; then
+if [ $ret == "1" ] && [ -d ${LLVM_PREFIX} ] && [ ${LLVM_PREFIX} != "/usr" ]; then
     echo "# " >> ${HOME}/.bashrc
     echo "# LLVM setting to \${LLVM_VERSION}"   >> ${HOME}/.bashrc
     echo "# " >> ${HOME}/.bashrc
     echo "export LLVM_VERSION=${LLVM_VERSION}" >> ${HOME}/.bashrc
-    echo "export LLVM_DIR=/usr/local/llvm_\${LLVM_VERSION}">> ${HOME}/.bashrc
+    echo "export LLVM_DIR=${LLVM_PREFIX}">> ${HOME}/.bashrc
     echo "export PATH=\$LLVM_DIR/bin:\$PATH"   >>  ${HOME}/.bashrc
     echo "export LIBRARY_PATH=\$LLVM_DIR/lib:\$LIBRARY_PATH"   >>  ${HOME}/.bashrc
     echo "export LD_LIBRARY_PATH=\$LLVM_DIR/lib:\$LD_LIBRARY_PATH"   >>  ${HOME}/.bashrc
     echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  ${HOME}/.bashrc
+    source ~/.bashrc
     # root /etc/skel
     sudo echo "# " >> /etc/skel/.bashrc
     sudo echo "# LLVM setting to \${LLVM_VERSION}"   >> /etc/skel/.bashrc
     sudo echo "# " >> /etc/skel/.bashrc
     sudo echo "export LLVM_VERSION=${LLVM_VERSION}" >> /etc/skel/.bashrc
-    sudo echo "export LLVM_DIR=/usr/local/llvm_\${LLVM_VERSION}">> /etc/skel/.bashrc
+    sudo echo "export LLVM_DIR=${LLVM_PREFIX}">> /etc/skel/.bashrc
     sudo echo "export PATH=\$LLVM_DIR/bin:\$PATH"   >>  /etc/skel/.bashrc
     sudo echo "export LIBRARY_PATH=\$LLVM_DIR/lib:\$LIBRARY_PATH"   >>  /etc/skel/.bashrc
     sudo echo "export LD_LIBRARY_PATH=\$LLVM_DIR/lib:\$LD_LIBRARY_PATH"   >>  /etc/skel/.bashrc
     sudo echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  /etc/skel/.bashrc
 fi
 
-source ~/.bashrc
 sudo ldconfig -v
