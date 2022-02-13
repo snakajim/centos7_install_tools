@@ -67,7 +67,7 @@ else
   CLANG_VERSION="0"
 fi
 
-sudo yum -y install ninja-build
+sudo yum -y install ninja-build libedit-devel libxml2-devel ncurses-devel python-devel swig
 
 if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTARCH == "x86_64" ] && [ $FORCE_PREBUILD == "0" ] ) ) && [ "$CLANG_VERSION" -lt 120000 ]; then
   echo "Your clang is not new. Need to update."
@@ -83,13 +83,13 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
   cmake -G "Ninja" -G "Unix Makefiles"\
     -DCMAKE_C_COMPILER=`which gcc` \
     -DCMAKE_CXX_COMPILER=`which g++` \
-    -DLLVM_ENABLE_PROJECTS="clang;llvm;lld" \
+    -DLLVM_ENABLE_PROJECTS="clang;llvm;lld;lldb" \
     -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi" \
     -DCMAKE_BUILD_TYPE=RELEASE \
     -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM"\
     -DCMAKE_INSTALL_PREFIX=${LLVM_PREFIX} \
     ../llvm && cmake --build . -j`nproc`
-  sudo ninja install
+  sudo make install
   end_time=`date +%s`
   run_time=$((end_time - start_time))
 #  make clean && cd ${HOME}

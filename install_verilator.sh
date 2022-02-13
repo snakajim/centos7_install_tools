@@ -64,7 +64,7 @@ else
   CLANG_VERSION="0"
 fi
 
-sudo yum -y install ninja-build
+sudo yum -y install ninja-build binutils-x86_64-linux-gnu
 
 if [ "$CLANG_VERSION" -gt 130000 ]; then
   echo "use clang for build tool"
@@ -96,7 +96,7 @@ cd ${HOME}/tmp/verilator && autoconf && \
   ./configure --prefix=/usr/local/verilator_4_${VERILATOR_REV} \
   CC=$CC \
   CXX=$CXX && \
-  make -j`nproc` 2>&1 ${HOME}/run_verilator${VERILATOR_REV}.log && \
+  make -j`nproc` &> ${HOME}/run_verilator${VERILATOR_REV}.log && \
   sudo make install
 end_time=`date +%s`
 run_time=$((end_time - start_time))
