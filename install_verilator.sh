@@ -96,7 +96,7 @@ cd ${HOME}/tmp/verilator && autoconf && \
   ./configure --prefix=/usr/local/verilator_4_${VERILATOR_REV} \
   CC=$CC \
   CXX=$CXX && \
-  make -j`nproc` 2>&1 ${HOME}/tmp/run_verilator${VERILATOR_REV}.log && \
+  make -j`nproc` 2>&1 ${HOME}/run_verilator${VERILATOR_REV}.log && \
   sudo make install
 end_time=`date +%s`
 run_time=$((end_time - start_time))
@@ -106,13 +106,13 @@ sudo ln -sf /usr/local/verilator_4_${VERILATOR_REV}/bin/verilator* /usr/local/ve
 #
 # report log
 #
-echo "cat /proc/cpuinfo" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-cat /proc/cpuinfo  >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-echo "nproc" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-nproc >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-echo "tool chain version" >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-$CC --version >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
-echo "install_verilator.sh costs $run_time [sec]." >> ${HOME}/tmp/run_verilator${VERILATOR_REV}.log
+echo "cat /proc/cpuinfo" >> ${HOME}/run_verilator${VERILATOR_REV}.log
+cat /proc/cpuinfo  >> ${HOME}/run_verilator${VERILATOR_REV}.log
+echo "nproc" >> ${HOME}/run_verilator${VERILATOR_REV}.log
+nproc >> ${HOME}/run_verilator${VERILATOR_REV}.log
+echo "tool chain version" >> ${HOME}/run_verilator${VERILATOR_REV}.log
+$CC --version >> ${HOME}/run_verilator${VERILATOR_REV}.log
+echo "install_verilator.sh costs $run_time [sec]." >> ${HOME}/run_verilator${VERILATOR_REV}.log
 echo ""
 
 #
