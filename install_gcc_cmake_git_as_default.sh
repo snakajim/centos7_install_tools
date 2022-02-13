@@ -13,6 +13,7 @@ GCC_VERSION=$(gcc --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02
 CMAKE_VERSION=$(cmake --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
 GIT_VERSION=$(git --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
 CENTOS_VERSION=$(cat /etc/os-release | grep "PRETTY_NAME=" | sed -r 's#^PRETTY_NAME="CentOS\s+Linux\s+([0-9]).+#\1#')
+GMAKE_VERSION=$(make --version | awk 'NR<2 { print $3 }' | awk -F. '{printf "%2d%02d%02d", $1,$2,$3}')
 
 # install dependencies for build tools
 sudo yum -y install wget aria2 git
@@ -68,3 +69,16 @@ else
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/cmake
 fi
 
+if [ $GMAKE_VERSION -gt 41000 ]; then
+  echo "Your gcc is new, no need to refresh. Installation skip."
+else
+  echo "Your cmake is old, replace under /usr/bin."
+  #sudo yum -y remove cmake
+  mkdir -p ${HOME}/tmp/gmake && rm -rf ${HOME}/tmp/gmake/* && cd ${HOME}/tmp/gmake && \
+  aria2c -x4 http://ftp.gnu.org/gnu/make/make-4.2.tar.gz
+  cd ${HOME}/tmp/gmake && tar -zxvf make-4.2.tar.gz
+  cd ${HOME}/tmp/gmake/make-4.2 && mkdir -p build && cd build && ../configure --prefix=/usr && make -j1
+  cd ${HOME}/tmp/gmake/make-4.2/build && sudo make install
+  sudo ldconfig -v
+  cd ${HOME}/tmp && rm -rf ${HOME}/tmp/gmake
+fi
