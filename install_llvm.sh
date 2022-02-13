@@ -80,7 +80,7 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     tar xf llvm-project-${LLVM_VERSION}.src.tar && \
     cd llvm-project-${LLVM_VERSION}.src && mkdir -p build && cd build
   start_time=`date +%s`
-  cmake -G Ninja -G "Unix Makefiles"\
+  cmake -G "Ninja" -G "Unix Makefiles"\
     -DCMAKE_C_COMPILER=`which gcc` \
     -DCMAKE_CXX_COMPILER=`which g++` \
     -DLLVM_ENABLE_PROJECTS="clang;llvm;lld" \
@@ -88,7 +88,7 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
     -DCMAKE_BUILD_TYPE=RELEASE \
     -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM"\
     -DCMAKE_INSTALL_PREFIX=${LLVM_PREFIX} \
-    ../llvm && ninja -j`nproc`
+    ../llvm && cmake --build . -j`nproc`
   sudo ninja install
   end_time=`date +%s`
   run_time=$((end_time - start_time))
@@ -145,4 +145,4 @@ if [ $ret == "1" ] && [ -d ${LLVM_PREFIX} ] && [ ${LLVM_PREFIX} != "/usr" ]; the
     sudo echo "export LLVM_CONFIG=\$LLVM_DIR/bin/llvm-config"   >>  /etc/skel/.bashrc
 fi
 
-sudo ldconfig -v
+sudo ldconfig
