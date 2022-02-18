@@ -92,7 +92,7 @@ if ( ( [ $HOSTARCH == "aarch64" ]  && [ $FORCE_PREBUILD == "0" ] ) || ( [ $HOSTA
   sudo make install
   end_time=`date +%s`
   run_time=$((end_time - start_time))
-#  make clean && cd ${HOME}
+  make clean && cd ${HOME}
 fi
 
 if ( [ $HOSTARCH == "x86_64" ]  && [ $FORCE_PREBUILD == "1" ] ) && [ "$CLANG_VERSION" -lt 120000 ]; then

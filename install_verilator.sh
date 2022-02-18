@@ -101,7 +101,7 @@ sudo make install
 end_time=`date +%s`
 run_time=$((end_time - start_time))
 sudo ln -sf /usr/local/verilator_4_${VERILATOR_REV}/bin/verilator* /usr/local/verilator_4_${VERILATOR_REV}/share/verilator/bin/
-#cd ${HOME}/tmp/verilator && make clean
+cd ${HOME}/tmp/verilator && make clean
 
 #
 # report log
