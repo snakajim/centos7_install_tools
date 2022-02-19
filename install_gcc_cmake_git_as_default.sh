@@ -116,5 +116,7 @@ echo "nproc" >> ${HOME}/run_gcc9.4.0.log
 nproc >> ${HOME}/run_gcc9.4.0.log
 echo "/usr/bin/g++ version" >> ${HOME}/run_gcc9.4.0.log
 /usr/bin/g++ --version >> ${HOME}/run_gcc9.4.0.log
+/usr/bin/ld --version >> ${HOME}/run_gcc9.4.0.log
+/usr/bin/gdb --version >> ${HOME}/run_gcc9.4.0.log
 echo "gcc installation costs $run_time [sec]." >> ${HOME}/run_gcc9.4.0.log
 echo ""
