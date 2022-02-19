@@ -33,9 +33,12 @@ else
   mkdir -p ${HOME}/tmp/gcc && rm -rf ${HOME}/tmp/gcc/* && cd ${HOME}/tmp/gcc && \
     aria2c -x4 http://ftp.tsukuba.wide.ad.jp/software/gcc/releases/gcc-9.4.0/gcc-9.4.0.tar.gz
   cd ${HOME}/tmp/gcc && tar -zxvf gcc-9.4.0.tar.gz && cd gcc-9.4.0 && ./contrib/download_prerequisites
+  start_time=`date +%s`
   cd ${HOME}/tmp/gcc/gcc-9.4.0 && mkdir -p build && cd build && ../configure --enable-languages=c,c++ --prefix=/usr --disable-multilib
   cd ${HOME}/tmp/gcc/gcc-9.4.0/build && make -j`nproc`
   cd ${HOME}/tmp/gcc/gcc-9.4.0/build && sudo make install
+  end_time=`date +%s`
+  run_time=$((end_time - start_time))
   sudo mv /usr/lib64/libstdc++.so.6.0.28-gdb.py /usr/lib64/back_libstdc++.so.6.0.28-gdb.py
   sudo sed -i -e '$ a /usr/lib64' /etc/ld.so.conf
   sudo ldconfig
@@ -106,3 +109,12 @@ else
   sudo ldconfig
   cd ${HOME}/tmp && rm -rf ${HOME}/tmp/binutils
 fi
+
+echo "cat /proc/cpuinfo" > ${HOME}/run_gcc9.4.0.log
+cat /proc/cpuinfo  >> ${HOME}/run_gcc9.4.0.log
+echo "nproc" >> ${HOME}/run_gcc9.4.0.log
+nproc >> ${HOME}/run_gcc9.4.0.log
+echo "/usr/bin/g++ version" >> ${HOME}/run_gcc9.4.0.log
+/usr/bin/g++ --version >> ${HOME}/run_gcc9.4.0.log
+echo "gcc installation costs $run_time [sec]." >> ${HOME}/run_gcc9.4.0.log
+echo ""
