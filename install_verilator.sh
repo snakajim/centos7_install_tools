@@ -6,7 +6,7 @@
 # How to download:
 # $> curl https://raw.githubusercontent.com/snakajim/centos7_install_tools/main/install_verilator.sh
 #
-VERILATOR_REV="216"
+VERILATOR_REV="228"
 URL_VERILATOR="https://github.com/verilator/verilator/tarball/v4.${VERILATOR_REV}"
 
 # OS Version check
