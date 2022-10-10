@@ -48,10 +48,19 @@ sudo mkdir -p ${GCC_DIR}
 sudo tar -Jxvf ~/tmp/${HOSTARCH}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-eabi.tar.xz -C ${GCC_DIR}
 sudo tar -Jxvf ~/tmp/${HOSTARCH}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-linux-gnueabihf.tar.xz -C ${GCC_DIR}
 sudo tar -Jxvf ~/tmp/${HOSTARCH}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-aarch64-none-elf.tar.xz -C ${GCC_DIR}
+# register path in ~/.bashrc
 echo "# AArch32 bare-metal target (arm-none-eabi)" >> ${HOME}/.bashrc
 echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-eabi/bin:\$PATH" >> ${HOME}/.bashrc
 echo "# AArch32 GNU/Linux target with hard float (arm-none-linux-gnueabihf)" >> ${HOME}/.bashrc
 echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-linux-gnueabihf/bin:\$PATH" >> ${HOME}/.bashrc
 echo "# AArch64 bare-metal target (aarch64-none-elf)" >> ${HOME}/.bashrc
 echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-aarch64-none-elf/bin:\$PATH" >> ${HOME}/.bashrc
-  
+# register path in /etc/skel/.bashrc
+sudo echo "# AArch32 bare-metal target (arm-none-eabi)" >> /etc/skel/.bashrc
+sudo echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-eabi/bin:\$PATH" >> /etc/skel/.bashrc
+sudo echo "# AArch32 GNU/Linux target with hard float (arm-none-linux-gnueabihf)" >> /etc/skel/.bashrc
+sudo echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-arm-none-linux-gnueabihf/bin:\$PATH" >> /etc/skel/.bashrc
+sudo echo "# AArch64 bare-metal target (aarch64-none-elf)" >> /etc/skel/.bashrc
+sudo echo "export PATH=${GCC_DIR}/arm-gnu-toolchain-${GCC_VER}-${HOSTARCH}-aarch64-none-elf/bin:\$PATH" >> /etc/skel/.bashrc
+
+# EOF
